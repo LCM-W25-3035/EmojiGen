@@ -29,7 +29,7 @@ def extract_unicode(script_content):
             state_data = query.get("state", {}).get("data", [])
             # print(type(state_data))
             # print(state_data)
-            if type(state_data) == dict and 'codepointsHex' in state_data.keys():
+            if isinstance(state_data,dict) and 'codepointsHex' in state_data.keys():
                 # print("here")\
                 unicodes = ''
                 # print(state_data['codepointsHex'])
