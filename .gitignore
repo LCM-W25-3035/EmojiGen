@@ -1,0 +1,3 @@
+#Ignore the data/images directory
+/data/images/
+/data/processed_images/
