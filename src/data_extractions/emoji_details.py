@@ -27,16 +27,13 @@ def extract_unicode(script_content):
         emoji_data = page_props.get("dehydratedState", {}).get("queries", [])
         for query in emoji_data:
             state_data = query.get("state", {}).get("data", [])
-            # print(type(state_data))
-            # print(state_data)
             if isinstance(state_data,dict) and 'codepointsHex' in state_data.keys():
-                # print("here")\
                 unicodes = ''
-                # print(state_data['codepointsHex'])
-                # breakpoint()
+                
+        
                 for unicode in state_data['codepointsHex']:
-                    # print(unicode)
-                    # breakpoint()
+                    
+            
                     if unicodes == '':
                         unicodes = unicodes+unicode
                     else:
@@ -72,11 +69,11 @@ def extract_emoji_details(emoji_url):
 
     # Create the technical information URL
     unicode_url = emoji_url + "#technical"
-    # print(f"Fetching Unicode details from: {unicode_url}")
+    
     
     unicode_soup = fetch_page(unicode_url)
     if not unicode_soup:
-        # print("not found")
+        
         breakpoint()
         return description, "No Unicode available", "No Codepoints Hex available"
 
@@ -86,10 +83,10 @@ def extract_emoji_details(emoji_url):
 
 
     if script_tag:
-        # print("found")
-        # print(script_tag)
+        
+        
         codepoints_hex = extract_unicode(script_tag.string)
-        # breakpoint()
+
         # Parse the JSON-like content within the script tag
     return description, codepoints_hex
 
@@ -111,7 +108,7 @@ with open(input_file, "r", encoding="utf-8") as infile, open(output_file, "w", n
         emoji_url = base_url + row["URL"]
 
         # Extract description and Unicode details
-        # print(f"Fetching details for {row['Title']} ({row['Emoji']})...")
+        
         description, codepoints_hex = extract_emoji_details(emoji_url)
 
         # Add the details to the row and save to the output file
