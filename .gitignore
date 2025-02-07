@@ -1,0 +1,5 @@
+#Ignore the data/images directory
+/data/images/
+/data/processed_images/
+/data/augmented_images/
+/data/tensor_images/

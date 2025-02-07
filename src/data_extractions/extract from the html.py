@@ -38,9 +38,7 @@ with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
         for group in groups:
             soup = BeautifulSoup(group, "html.parser")
             group_name = group_dict[group]
-            # print(group_name)
-            # continue
-
+            
             # Find all subgroups by their wrapper divs
             subgroups = soup.find_all("div", class_="mb-4 scroll-mt-[140px] md:scroll-mt-[180px]")
 
