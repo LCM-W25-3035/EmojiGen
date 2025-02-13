@@ -1,3 +1,4 @@
 #Ignore the data/images directory
 /data/images/
+/data/tensor_images/
 /data/processed_images/
