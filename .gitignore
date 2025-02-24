@@ -1,4 +1,5 @@
 #Ignore the data/images directory
+/.env
 /data/images/
 /data/tensor_images/
 /data/processed_images/
