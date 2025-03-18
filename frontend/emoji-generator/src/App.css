@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  padding: 20px;
+}
+
+.proj-title {
+  margin-bottom: 5px;
+}
+
+.proj-desc {
+  margin-bottom: 10px;
+}
+
+.user-input {
+  display: flex;
+  align-items: top;
+}
+
+.user-input input[type=text] {
+  font-size: 1.1em;
+  height: 50px;
+  width: 500px;
+  padding: 5px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #E4E4E4;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
+
+
+.user-input label {
+  font-size: 1.1em;
+}
+
+
+.gen-btn {
+  height: 50px;
+  width: 150px;
+  font-family: Inter, sans-serif;
+  font-size: 1.1em;
+  font-weight: 700;
+  border: none;
+  background-color: #E4E4E4;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.gen-btn:hover {
+  scale: 1.05;
+}
+
+.output {
+  border: 1px black solid;
+  border-radius: 12px;
+  height: 500px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 10px;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.img-blocks {
+  height: 100px;
+  width: 100px;
+  background-color: #DEDEDE;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-blocks img {
+  height: 50px;
+  width: 50px;
+}
