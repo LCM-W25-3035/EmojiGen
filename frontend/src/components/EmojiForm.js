@@ -1,7 +1,7 @@
 // src/components/EmojiForm.js
 import React, { useState } from 'react';
 
-const EmojiForm = ({ onGenerate }) => {
+const EmojiForm = ({ onGenerate, isLoading }) => {
   const [prompt, setPrompt] = useState('');
   const [imgType, setImgType] = useState('Emoji');
 
@@ -13,8 +13,7 @@ const EmojiForm = ({ onGenerate }) => {
   return (
     <form className="user-input" onSubmit={handleSubmit}>
       <div className="prompt">
-        <input
-          type="text"
+        <input type="text"
           placeholder="Grinning face with sunglasses"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
@@ -42,7 +41,7 @@ const EmojiForm = ({ onGenerate }) => {
           <label htmlFor="img-sticker">Sticker</label>
         </div>
       </div>
-      <button className="gen-btn" type="submit">Generate</button>
+      <button className="gen-btn" type="submit">{isLoading ? 'Loading..' : 'Generate'}</button>
     </form>
   );
 };

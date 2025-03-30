@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from 'react';
 import Header from './components/Header';
 import EmojiForm from './components/EmojiForm';
@@ -7,22 +6,32 @@ import axios from 'axios';
 import './App.css';
 
 function App() {
-  const [images, setImages] = useState(['/smile.png', '/smile.png']);
+  const [genImage, setGenImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleGenerate = async (prompt, imgType) => {
-    const response = await axios.post('YOUR_API_ENDPOINT', {
-      prompt,
-      type: imgType
-    });
-    const generatedImages = Array(3).fill('./smile.png'); 
-    setImages(generatedImages);
+  const handleGenerate = async (prompt) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post('http://localhost:8000/generate-from-text', {
+        text: prompt
+      });
+
+      setGenImage(response.data.image);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to generate emoji');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="App">
       <Header />
-      <EmojiForm onGenerate={handleGenerate} />
-      <EmojiOutput images={images} />
+      <EmojiForm onGenerate={handleGenerate} isLoading={isLoading} />
+      <EmojiOutput image={genImage} error={error} isLoading={isLoading} />
     </div>
   );
 }
