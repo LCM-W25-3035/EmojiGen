@@ -1,66 +1,55 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse, FileResponse
-from PIL import Image
+from fastapi import FastAPI, HTTPException
+import torch
 import io
 import base64
-import numpy as np
-import torch
-from pydantic import BaseModel
-from typing import List
-import os
+import uvicorn
+from models import Generator
+from schemas import GenerateRequest, GenerateResponse
+from utilities import embed_text, tensor_to_pil, device
 
-from app.models import load_model, generate_emoji
-from app.schemas import GenerationRequest
+current_dir = os.path.dirname(os.path.abspath(__file__))
+emoji_model_path = os.path.join(current_dir, "models", "cgan_emoji_generator.pth")
+sticker_model_path = os.path.join(current_dir, "models", "cgan_sticker_generator.pth")
 
-app = FastAPI(title="Emoji Generator API")
+# Instantiate models for emoji and sticker generation
+emoji_generator = Generator().to(device)
+sticker_generator = Generator().to(device)
 
-# CORS configuration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Loading pre-trained models
+emoji_generator.load_state_dict(torch.load(emoji_model_path, map_location=device))
+sticker_generator.load_state_dict(torch.load(sticker_model_path, map_location=device))
+emoji_generator.eval()
+sticker_generator.eval()
 
-# Load model at startup
-@app.on_event("startup")
-async def startup_event():
-    global generator, clip_model, clip_tokenizer, device
-    generator, clip_model, clip_tokenizer, device = load_model()
+# Create FastAPI app instance
+app = FastAPI()
 
-class TextRequest(BaseModel):
-    text: str
+@app.post("/generate", response_model=GenerateResponse)
+def generate_image(req: GenerateRequest):
+    if req.model_type.lower() not in ["emoji", "sticker"]:
+        raise HTTPException(status_code=400, detail="Invalid model type. Choose 'emoji' or 'sticker'.")
+    
+    # Generate text embedding using CLIP
+    embed = embed_text(req.prompt)  # shape: (1, 512)
+    # Generate random noise vector
+    noise = torch.randn(1, 100).to(device)
+    
+    # Generate image using the selected generator model
+    with torch.no_grad():
+        if req.model_type.lower() == "emoji":
+            gen_tensor = emoji_generator(noise, embed)
+        else:
+            gen_tensor = sticker_generator(noise, embed)
+    
+    # Convert tensor output to a PIL image
+    pil_image = tensor_to_pil(gen_tensor)
+    
+    # Convert PIL image to a base64-encoded PNG
+    buffered = io.BytesIO()
+    pil_image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    
+    return GenerateResponse(image_base64=img_str)
 
-@app.post("/generate-from-text")
-async def generate_from_text(request: TextRequest):
-    try:
-        # Generate emoji from text
-        image_tensor = generate_emoji(
-            request.text, 
-            generator, 
-            clip_model, 
-            clip_tokenizer, 
-            device
-        )
-        
-        # Convert tensor to PIL Image
-        image = tensor_to_image(image_tensor)
-        
-        # Convert to base64
-        buffered = io.BytesIO()
-        image.save(buffered, format="PNG")
-        img_str = base64.b64encode(buffered.getvalue()).decode()
-        
-        return {"image": img_str}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-def tensor_to_image(tensor):
-    """Convert a tensor image to PIL Image"""
-    image = tensor.squeeze(0).cpu()  # remove batch dim and move to cpu
-    image = (image + 1) / 2  # scale from [-1, 1] to [0, 1]
-    image = image.permute(1, 2, 0).numpy()  # CHW to HWC
-    image = (image * 255).astype(np.uint8)
-    return Image.fromarray(image)
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
