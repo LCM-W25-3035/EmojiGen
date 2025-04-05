@@ -5,4 +5,4 @@ class GenerateRequest(BaseModel):
     model_type: str  # "emoji" or "sticker"
 
 class GenerateResponse(BaseModel):
-    image_base64: str
+    image: str

@@ -10,13 +10,14 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleGenerate = async (prompt) => {
+  const handleGenerate = async (prompt, imgType) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:8000/generate-from-text', {
-        text: prompt
+      const response = await axios.post('http://localhost:8000/generate', {
+        "prompt": prompt,
+        "model_type": imgType
       });
 
       setGenImage(response.data.image);
@@ -28,7 +29,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="app">
       <Header />
       <EmojiForm onGenerate={handleGenerate} isLoading={isLoading} />
       <EmojiOutput image={genImage} error={error} isLoading={isLoading} />
