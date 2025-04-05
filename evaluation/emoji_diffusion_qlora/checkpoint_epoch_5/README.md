@@ -1,5 +1,5 @@
 ---
-base_model: /Users/bikinghimire/.cache/huggingface/hub/models--sd-legacy--stable-diffusion-v1-5/snapshots/451f4fe16113bff5a5d2269ed5ad43b0592e9a14/unet
+base_model: C:\Users\Jyoti Prakash Uprety\.cache\huggingface\hub\models--sd-legacy--stable-diffusion-v1-5\snapshots\451f4fe16113bff5a5d2269ed5ad43b0592e9a14\unet
 library_name: peft
 ---
 
@@ -199,4 +199,5 @@ Carbon emissions can be estimated using the [Machine Learning Impact calculator]
 [More Information Needed]
 ### Framework versions
 
+- PEFT 0.15.0
 - PEFT 0.15.1
