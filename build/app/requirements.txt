@@ -1,4 +1,4 @@
-fastapi==0.115.12
+fastapi[standard]==0.115.12
 uvicorn==0.34.0
 torch==2.6.0
 pydantic==2.11.1
@@ -7,4 +7,5 @@ numpy==2.2.4
 pandas==2.2.3
 Pillow==11.1.0
 tqdm==4.67.1
-
+diffusers==0.32.2
+peft==0.15.1
