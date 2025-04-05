@@ -1,4 +1,3 @@
-// src/components/EmojiOutput.js
 import React from 'react';
 
 const EmojiOutput = ({ image, error, isLoading }) => {

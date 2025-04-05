@@ -1,4 +1,3 @@
-// src/components/EmojiForm.js
 import React, { useState } from 'react';
 
 const EmojiForm = ({ onGenerate, isLoading }) => {
@@ -20,25 +19,31 @@ const EmojiForm = ({ onGenerate, isLoading }) => {
           required
         />
         <div className="img-type-select">
-          <input
-            type="radio"
-            name="img_type"
-            id="img-emoji"
-            value="Emoji"
-            checked={imgType === 'Emoji'}
-            onChange={(e) => setImgType(e.target.value)}
-          />
-          <label htmlFor="img-emoji">Emoji</label>
+          <div>
+            <input
+              type="radio"
+              name="img_type"
+              id="img-emoji"
+              value="Emoji"
+              checked={imgType === 'Emoji'}
+              onChange={(e) => setImgType(e.target.value)}
+            />
+            &nbsp;
+            <label htmlFor="img-emoji">Emoji</label>
+          </div>
 
-          <input
-            type="radio"
-            name="img_type"
-            id="img-sticker"
-            value="Sticker"
-            checked={imgType === 'Sticker'}
-            onChange={(e) => setImgType(e.target.value)}
-          />
-          <label htmlFor="img-sticker">Sticker</label>
+          <div>
+            <input
+              type="radio"
+              name="img_type"
+              id="img-sticker"
+              value="Sticker"
+              checked={imgType === 'Sticker'}
+              onChange={(e) => setImgType(e.target.value)}
+            />
+            &nbsp;
+            <label htmlFor="img-sticker">Sticker</label>
+          </div>
         </div>
       </div>
       <button className="gen-btn" type="submit">{isLoading ? 'Loading..' : 'Generate'}</button>
