@@ -4,3 +4,5 @@
 /data/tensor_images/
 /data/processed_images/
 /frontend/node_modules/
+/data/processed_emoji_dataset.parquet/
+/data/processed_sticker_dataset.parquet
