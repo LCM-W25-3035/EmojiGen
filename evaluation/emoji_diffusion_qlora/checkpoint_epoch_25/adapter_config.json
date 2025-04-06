@@ -23,13 +23,13 @@
   "megatron_core": "megatron.core",
   "modules_to_save": null,
   "peft_type": "LORA",
-  "r": 8,
+  "r": 16,
   "rank_pattern": {},
   "revision": null,
   "target_modules": [
-    "to_k",
-    "to_q",
     "to_out.0",
+    "to_q",
+    "to_k",
     "to_v"
   ],
   "task_type": null,
