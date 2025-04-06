@@ -1,4 +1,13 @@
+# 🚀 Prompt Summary
+# First Prompt: Extract emoji group, subgroup, and description from manually downloaded HTML using BeautifulSoup.
+# Last Prompt: Fix emoji subgroup mapping when div class is missing and generate emoji metadata.
+# Model Used: ChatGPT (gpt-4-turbo)
+# -----------------------------------------------
+
 from bs4 import BeautifulSoup
+
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 import csv
 import os
 # Simulate your HTML content (use the actual HTML content or fetch dynamically)
@@ -81,4 +90,4 @@ with open(output_file, "w", newline="", encoding="utf-8") as csvfile:
             for row in emoji_data:
                 writer.writerow(row)
 
-print(f"Data successfully saved to {output_file}")
+logging.info(f"Data successfully saved to {output_file}")
