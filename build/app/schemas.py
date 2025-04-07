@@ -1,8 +1,9 @@
 from pydantic import BaseModel
 
-class GenerateRequest(BaseModel):
+class Request(BaseModel):
     prompt: str
-    model_type: str  # "emoji" or "sticker"
+    # gen_model: str
+    image_type: str
 
-class GenerateResponse(BaseModel):
+class Response(BaseModel):
     image: str
