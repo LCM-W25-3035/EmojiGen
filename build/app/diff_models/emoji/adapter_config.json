@@ -28,9 +28,9 @@
   "revision": null,
   "target_modules": [
     "to_k",
+    "to_out.0",
     "to_v",
-    "to_q",
-    "to_out.0"
+    "to_q"
   ],
   "task_type": null,
   "trainable_token_indices": null,

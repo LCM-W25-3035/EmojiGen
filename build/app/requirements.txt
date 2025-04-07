@@ -9,3 +9,5 @@ Pillow==11.1.0
 tqdm==4.67.1
 diffusers==0.32.2
 peft==0.15.1
+rembg==2.0.65
+onnxruntime==1.21.0

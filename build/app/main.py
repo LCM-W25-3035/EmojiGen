@@ -26,24 +26,29 @@ app.add_middleware(
 
 @app.post("/generate", response_model=Response)
 def generate_image(req: Request):
-    if req.gen_model.lower() not in ["diffusion", "gan"]:
-        raise HTTPException(status_code=400, detail="Invalid model type. Choose 'gan' or 'diffusion'.")
-    
-    if req.image_type.lower() not in ["emoji", "sticker"]:
-        raise HTTPException(status_code=400, detail="Invalid image type. Choose 'emoji' or 'sticker'.")
-    
-    if req.gen_model.lower() == "diffusion":
-        try:
-            img_b64 = emoji_diffusion(req.prompt, req.image_type)
-            return Response(image=img_b64)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
-    else:
-        try:
-            img_b64 = gan(req.prompt, req.image_type)
-            return Response(image=img_b64)
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
+    try:
+        img_b64 = emoji_diffusion(req.prompt, req.image_type)
+        return Response(image=img_b64)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    # if req.gen_model.lower() not in ["diffusion", "gan"]:
+    #     raise HTTPException(status_code=400, detail="Invalid model type. Choose 'gan' or 'diffusion'.")
+    #
+    # if req.image_type.lower() not in ["emoji", "sticker"]:
+    #     raise HTTPException(status_code=400, detail="Invalid image type. Choose 'emoji' or 'sticker'.")
+    #
+    # if req.gen_model.lower() == "diffusion":
+    #     try:
+    #         img_b64 = emoji_diffusion(req.prompt, req.image_type)
+    #         return Response(image=img_b64)
+    #     except Exception as e:
+    #         raise HTTPException(status_code=500, detail=str(e))
+    # else:
+    #     try:
+    #         img_b64 = gan(req.prompt, req.image_type)
+    #         return Response(image=img_b64)
+    #     except Exception as e:
+    #         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
      uvicorn.run("app.main:app", host="0.0.0.0", port=10000, reload=True)

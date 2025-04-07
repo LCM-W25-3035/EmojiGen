@@ -3,8 +3,17 @@ import os
 import torch
 import base64
 from PIL import Image
+from rembg import remove
 from peft import PeftModel, LoraConfig
 from diffusers import StableDiffusionPipeline
+
+def remove_background(image):
+    """Removes background from an RGBA image using rembg."""
+    img_bytes = io.BytesIO()
+    image.save(img_bytes, format='PNG')
+    img_bytes = img_bytes.getvalue()
+    output = remove(img_bytes)
+    return Image.open(io.BytesIO(output)).convert("RGBA")
 
 def emoji_diffusion(prompt, imgType):
     # Device configuration (use 'cuda' if available, otherwise 'mps' or 'cpu')
@@ -31,21 +40,31 @@ def emoji_diffusion(prompt, imgType):
         bias="none"
     )
 
-    # Directory for the final trained LoRA weights
+    # Determine model directory based on imgType
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    final_model_dir = os.path.join(current_dir, "diff_models", "emoji")
+    if imgType == "emoji":
+        final_model_dir = os.path.join(current_dir, "diff_models", "emoji")
+        height, width = 256, 256
+        guidance_scale = 7.5
+        num_inference_steps = 50
+    elif imgType == "sticker":
+        final_model_dir = os.path.join(current_dir, "diff_models", "sticker")
+        height, width = 256, 256
+        guidance_scale = 8.5  # Stickers might need sharper definition
+        num_inference_steps = 60
+    else:
+        raise ValueError("Invalid imgType. Choose 'emoji' or 'sticker'.")
 
     # Load the LoRA weights onto the UNet using PeftModel.from_pretrained
     pipe.unet = PeftModel.from_pretrained(pipe.unet, final_model_dir)
 
-    # Inference parameters
-    num_inference_steps = 50
-    guidance_scale = 7.5
-
     # Generate the image
     with torch.no_grad():
-        generated = pipe(prompt=prompt, num_inference_steps=num_inference_steps, guidance_scale=guidance_scale, height=256, width=256)
+        generated = pipe(prompt=prompt, num_inference_steps=num_inference_steps, guidance_scale=guidance_scale, height=height, width=width)
         image = generated.images[0]
+
+    # Remove background for transparent output
+    image = remove_background(image)
 
     # Save the generated image
     # Convert the image to a bytes buffer and encode as base64.
