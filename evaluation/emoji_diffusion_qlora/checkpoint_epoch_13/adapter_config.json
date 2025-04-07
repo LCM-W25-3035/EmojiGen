@@ -27,10 +27,10 @@
   "rank_pattern": {},
   "revision": null,
   "target_modules": [
-    "to_k",
-    "to_v",
+    "to_out.0",
     "to_q",
-    "to_out.0"
+    "to_k",
+    "to_v"
   ],
   "task_type": null,
   "trainable_token_indices": null,
