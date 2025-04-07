@@ -1,4 +1,13 @@
+# 🚀 Prompt Summary
+# First Prompt: Fetch individual emoji pages and extract their description and codepointsHex using requests and BeautifulSoup.
+# Last Prompt: Improve error handling for unicode extraction and save data into CSV format.
+# Model Used: ChatGPT (gpt-4-turbo)
+# -----------------------------------------------
+
 import os
+
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 import csv
 import requests
 from bs4 import BeautifulSoup
@@ -12,8 +21,6 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(_
 
 input_file = os.path.join(PROJECT_ROOT, "data", "emojipedia", "emojis_with_subgroups.csv")
 output_file = os.path.join(PROJECT_ROOT, "data", "emojipedia", "emoji_details.csv")
-
-# output_file = "../../data/emojipedia/emojis_details.csv"
 
 # Base URL for Emojipedia
 base_url = "https://emojipedia.org"
@@ -43,7 +50,7 @@ def extract_unicode(script_content):
             else:
                 continue
     except json.JSONDecodeError:
-        print("Failed to parse JSON.")
+        logging.info("Failed to parse JSON.")
     return None
 
 
@@ -53,7 +60,7 @@ def fetch_page(url):
     if response.status_code == 200:
         return BeautifulSoup(response.content, "html.parser")
     else:
-        print(f"Failed to fetch {url}: {response.status_code}")
+        logging.info(f"Failed to fetch {url}: {response.status_code}")
         return None
 
 # Function to extract description and Unicode from the emoji page
@@ -73,8 +80,6 @@ def extract_emoji_details(emoji_url):
     
     unicode_soup = fetch_page(unicode_url)
     if not unicode_soup:
-        
-        breakpoint()
         return description, "No Unicode available", "No Codepoints Hex available"
 
     # Extract `codepointsHex` from the JSON-like script
@@ -104,7 +109,7 @@ with open(input_file, "r", encoding="utf-8") as infile, open(output_file, "w", n
     for row in reader:
         if group != row["Group"]:
             group = row['Group']
-            print(group)
+            logging.info(group)
         emoji_url = base_url + row["URL"]
 
         # Extract description and Unicode details
@@ -119,4 +124,4 @@ with open(input_file, "r", encoding="utf-8") as infile, open(output_file, "w", n
         # Pause to avoid overloading the server
         time.sleep(0.5)
 
-print(f"Emoji details saved to {output_file}")
+logging.info(f"Emoji details saved to {output_file}")

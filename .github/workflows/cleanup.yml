@@ -1,0 +1,37 @@
+name: Clean up unwanted files
+
+on:
+  push:
+    branches:
+      - test
+      - release
+      - main
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Git identity
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+
+    - name: Remove unwanted files and directories
+      run: |
+        # Remove Jupyter notebook files
+        find . -name "*.ipynb" -type f -delete
+        # Remove HTML files
+        find . -name "*.html" -type f -delete
+        # Remove __pycache__, .idea, and .ipynb_checkpoints directories
+        find . -name "__pycache__" -type d -exec rm -r {} +
+        find . -name ".idea" -type d -exec rm -r {} +
+        find . -name ".ipynb_checkpoints" -type d -exec rm -r {} +
+        
+        git diff --exit-code || (git add -A && git commit -m "Remove unwanted files for ${GITHUB_REF##*/}" && git push)
