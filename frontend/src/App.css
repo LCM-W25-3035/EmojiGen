@@ -52,6 +52,18 @@ body {
   font-size: 1.1em;
 }
 
+.gen-model {
+  font-size: 1.1em;
+  height: 50px;
+  width: max-content;
+  padding: 5px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #E4E4E4;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+
 .gen-btn {
   height: 50px;
   width: 150px;

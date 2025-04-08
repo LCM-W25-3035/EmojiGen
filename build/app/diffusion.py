@@ -25,7 +25,7 @@ if pipe.safety_checker is not None:
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
 # Q-LoRA configuration (must match your training configuration)
-    lora_config = LoraConfig(
+lora_config = LoraConfig(
         r=16,
         lora_alpha=16,
         target_modules=["to_q", "to_k", "to_v", "to_out.0"],
