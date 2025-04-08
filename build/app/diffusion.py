@@ -7,13 +7,6 @@ from rembg import remove
 from peft import PeftModel, LoraConfig
 from diffusers import StableDiffusionPipeline
 
-def remove_background(image):
-    """Removes background from an RGBA image using rembg."""
-    img_bytes = io.BytesIO()
-    image.save(img_bytes, format='PNG')
-    img_bytes = img_bytes.getvalue()
-    output = remove(img_bytes)
-    return Image.open(io.BytesIO(output)).convert("RGBA")
 
 def emoji_diffusion(prompt, imgType):
     # Device configuration (use 'cuda' if available, otherwise 'mps' or 'cpu')
@@ -62,10 +55,6 @@ def emoji_diffusion(prompt, imgType):
     with torch.no_grad():
         generated = pipe(prompt=prompt, num_inference_steps=num_inference_steps, guidance_scale=guidance_scale, height=height, width=width)
         image = generated.images[0]
-
-    # Remove background for transparent output
-    image = remove_background(image)
-
     # Save the generated image
     # Convert the image to a bytes buffer and encode as base64.
     buffered = io.BytesIO()
