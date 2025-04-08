@@ -27,9 +27,9 @@
   "rank_pattern": {},
   "revision": null,
   "target_modules": [
-    "to_out.0",
-    "to_q",
     "to_k",
+    "to_q",
+    "to_out.0",
     "to_v"
   ],
   "task_type": null,
