@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from prometheus_fastapi_instrumentator import Instrumentator
+# from prometheus_fastapi_instrumentator import Instrumentator
 
 from app.gan import gan
 from app.schemas import Request, Response
@@ -11,8 +11,8 @@ from app.diffusion import diffusion
 app = FastAPI()
 
 # Initialize and apply Prometheus instrumentation
-instrumentator = Instrumentator()
-instrumentator.instrument(app).expose(app)
+# instrumentator = Instrumentator()
+# instrumentator.instrument(app).expose(app)
 
 # CORS configuration
 app.add_middleware(

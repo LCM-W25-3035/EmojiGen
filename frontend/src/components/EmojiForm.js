@@ -63,7 +63,9 @@ const EmojiForm = ({ onGenerate, isLoading }) => {
           <option value="diffusion">Diffusion</option>
         </select>
       </div>
-      <button className="gen-btn" type="submit">{isLoading ? 'Loading..' : 'Generate'}</button>
+      {isLoading ? <button className="gen-btn" disabled>generating..</button>
+      : <button className="gen-btn" type="submit">Generate</button>}
+      
     </form>
   );
 };
